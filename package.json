@@ -1,0 +1,18 @@
+{
+  "name": "obsidian-margin",
+  "version": "1.1.0",
+  "description": "Margin — navigator, to-do sidebar, colour schemes and micro-UI blocks for Obsidian.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc --noEmit && node esbuild.config.mjs production",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "esbuild": "^0.24.2",
+    "obsidian": "^1.7.2",
+    "typescript": "^5.7.2"
+  }
+}

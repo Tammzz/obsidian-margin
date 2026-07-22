@@ -1,0 +1,9 @@
+node_modules/
+package-lock.json
+
+# Local plugin state written by Obsidian — user data, not source.
+data.json
+
+# Build/editor noise
+*.log
+.DS_Store
