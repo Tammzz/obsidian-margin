@@ -7,3 +7,6 @@ data.json
 # Build/editor noise
 *.log
 .DS_Store
+
+# Pre-TypeScript main.js, kept until the port is verified.
+main.js.pre-ts-backup
