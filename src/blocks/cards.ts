@@ -1,6 +1,6 @@
 import type { TFile } from "obsidian";
 import type MarginPlugin from "../main";
-import { KIND_CLASS, firstHeading, overviewSnippet, stripMd } from "../util/markdown";
+import { KIND_CLASS, countOpenTasks, firstHeading, overviewSnippet, stripMd } from "../util/markdown";
 
 interface CaptureItem {
   file: TFile;
@@ -108,9 +108,7 @@ export async function renderProjectCards(plugin: MarginPlugin, el: HTMLElement) 
     for (const pf of app.vault.getMarkdownFiles()) {
       if (!pf.path.startsWith(projPath + "/")) continue;
       try {
-        const t = await app.vault.cachedRead(pf);
-        const m = t.match(/^\s*[-*]\s\[ \]\s+\S/gm);
-        if (m) tasks += m.length;
+        tasks += countOpenTasks(await app.vault.cachedRead(pf));
       } catch (e) { /* skip */ }
     }
     items.push({

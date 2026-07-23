@@ -13,6 +13,22 @@ export default class MarginPlugin extends Plugin {
   lastFile: TFile | null = null;
 
   async onload() {
+    try {
+      await this.start();
+    } catch (err) {
+      this.report("onload", err);
+    }
+  }
+
+  /** Surface a failure with its stack; a silent plugin is undebuggable. */
+  private report(where: string, err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    const stack = err instanceof Error && err.stack ? err.stack : "(no stack)";
+    console.error(`[Margin] ${where} failed`, err);
+    new Notice(`Margin — ${where} failed:\n${msg}\n\n${stack.split("\n").slice(1, 5).join("\n")}`, 60000);
+  }
+
+  private async start() {
     await this.loadSettings();
 
     this.styleEl = document.createElement("style");
@@ -60,10 +76,12 @@ export default class MarginPlugin extends Plugin {
     });
     this.addRibbonIcon("plus-square", "New capture", () => this.newCapture());
 
-    // status bar: leaf + vault ok + note count
+    // status bar: leaf + vault ok + note count. The count is filled in on
+    // layout-ready — during onload the vault index is not populated yet and
+    // getMarkdownFiles() still returns an empty list.
     this.statusEl = this.addStatusBarItem();
     this.statusEl.addClass("mg-vault-ok");
-    this.updateStatusBar();
+    this.statusEl.setText("✿ vault ok");
 
     // keep the to-do view fresh
     const refresh = debounce(() => { this.refreshTodoViews(); this.updateStatusBar(); }, 2000, true);
@@ -73,24 +91,36 @@ export default class MarginPlugin extends Plugin {
 
     // track the last opened note so the "this note" filter has a target
     this.registerEvent(this.app.workspace.on("file-open", (f) => {
-      if (f) {
-        this.lastFile = f;
-        for (const leaf of this.app.workspace.getLeavesOfType(TODO_VIEW_TYPE)) {
-          if (leaf.view instanceof TodoView && leaf.view.filter === "note") leaf.view.refresh();
-        }
+      try {
+        this.onFileOpen(f);
+      } catch (err) {
+        this.report("file-open", err);
       }
     }));
     this.lastFile = this.app.workspace.getActiveFile();
 
     this.app.workspace.onLayoutReady(() => {
-      if (this.app.workspace.getLeavesOfType(TODO_VIEW_TYPE).length === 0) {
-        this.activateTodoView(false);
+      try {
+        this.updateStatusBar();
+        if (this.app.workspace.getLeavesOfType(TODO_VIEW_TYPE).length === 0) {
+          this.activateTodoView(false);
+        }
+      } catch (err) {
+        this.report("layout-ready", err);
       }
     });
   }
 
   onunload() {
     this.styleEl?.remove();
+  }
+
+  private onFileOpen(f: TFile | null) {
+    if (!f) return;
+    this.lastFile = f;
+    for (const leaf of this.app.workspace.getLeavesOfType(TODO_VIEW_TYPE)) {
+      if (leaf.view instanceof TodoView && leaf.view.filter === "note") leaf.view.refresh();
+    }
   }
 
   async activateTodoView(reveal = true) {

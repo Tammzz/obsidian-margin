@@ -1,6 +1,6 @@
 import type { MarkdownPostProcessorContext } from "obsidian";
 import type MarginPlugin from "../main";
-import { humanAge } from "../util/markdown";
+import { countOpenTasks, humanAge } from "../util/markdown";
 
 /* Vault/folder statistics for statline tokens. Scope is the folder
    containing the block ("" = whole vault); excluded folders are skipped. */
@@ -15,9 +15,7 @@ export async function computeStatTokens(plugin: MarginPlugin, scope: string) {
   for (const f of files) {
     latest = Math.max(latest, f.stat.mtime);
     try {
-      const t = await plugin.app.vault.cachedRead(f);
-      const m = t.match(/^\s*[-*]\s\[ \]\s+\S/gm);
-      if (m) tasks += m.length;
+      tasks += countOpenTasks(await plugin.app.vault.cachedRead(f));
     } catch (e) { /* unreadable file — skip */ }
   }
 

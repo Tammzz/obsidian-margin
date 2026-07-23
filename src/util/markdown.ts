@@ -46,6 +46,16 @@ export function taskPriority(text: string): { pri: string | null; text: string }
     : { pri: null, text };
 }
 
+/* Open `- [ ]` with content on the SAME line. `\s` would match a newline,
+   so an empty checkbox would pair with the next line's first word and be
+   counted as a task; `[ \t]` cannot cross lines. */
+const OPEN_TASK = /^[ \t]*[-*] \[ \][ \t]+\S/gm;
+
+/** Number of open tasks in a note. Empty checkboxes do not count. */
+export function countOpenTasks(text: string): number {
+  return (text.match(OPEN_TASK) || []).length;
+}
+
 /** Badge class per capture kind, used by the inbox grid. */
 export const KIND_CLASS: Record<string, string> = {
   idea: "",
