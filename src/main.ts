@@ -1,6 +1,9 @@
 import { Notice, Plugin } from "obsidian";
 import { CaptureModal } from "./capture/capture-modal";
 import { quickDump } from "./capture/quick-dump";
+import { ResolverProofModal } from "./dev/resolver-proof-modal";
+import { buildSnapshot } from "./dev/vault-snapshot";
+import { prepare } from "./matcher/prepare";
 import { MarginSettings, parseSettings } from "./settings";
 import { MarginSettingTab } from "./settings-tab";
 import { ObsidianVaultIO } from "./vault/obsidian-vault-io";
@@ -26,6 +29,22 @@ export default class MarginPlugin extends Plugin {
       id: "quick-capture",
       name: "Quick capture",
       callback: () => new CaptureModal(this.app, (text) => this.dump(text)).open()
+    });
+
+    // Tuning harness for the resolver proof (I-003). Removed in I-004 when the
+    // live capture rail replaces it.
+    this.addCommand({
+      id: "resolver-proof",
+      name: "Resolver proof (dev)",
+      callback: () => {
+        // Normalize the vault once per session, not once per keystroke.
+        const started = performance.now();
+        const snapshot = prepare(buildSnapshot(this.app));
+        console.log(
+          `Margin: prepared ${snapshot.notes.length} notes in ${(performance.now() - started).toFixed(0)} ms`
+        );
+        new ResolverProofModal(this.app, snapshot).open();
+      }
     });
 
     this.addSettingTab(new MarginSettingTab(this.app, this));

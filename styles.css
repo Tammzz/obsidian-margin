@@ -69,3 +69,58 @@ body {
   color: var(--margin-ui-text-faint);
   font-size: var(--margin-ui-font-size);
 }
+
+/* Resolver proof harness — removed with the harness in I-004. */
+
+.margin-proof-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--margin-ui-gap);
+}
+
+.margin-proof-title {
+  color: var(--margin-ui-text);
+  font-weight: 600;
+}
+
+.margin-proof-strength {
+  font-size: var(--margin-ui-font-size);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.margin-proof-strength-strong {
+  color: var(--margin-ui-text-accent);
+}
+
+.margin-proof-strength-possible {
+  color: var(--margin-ui-text-faint);
+}
+
+.margin-proof-score {
+  margin-left: auto;
+  color: var(--margin-ui-text-muted);
+  font-size: var(--margin-ui-font-size);
+  font-variant-numeric: tabular-nums;
+}
+
+.margin-proof-evidence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--margin-ui-gap) / 2);
+  margin-top: calc(var(--margin-ui-gap) / 2);
+}
+
+.margin-proof-chip {
+  padding: 0 0.5em;
+  border: 1px solid var(--margin-ui-border);
+  border-radius: var(--margin-ui-radius);
+  color: var(--margin-ui-text-muted);
+  font-size: var(--margin-ui-font-size);
+}
+
+.margin-proof-path {
+  margin-top: calc(var(--margin-ui-gap) / 2);
+  color: var(--margin-ui-text-faint);
+  font-size: var(--margin-ui-font-size);
+}
