@@ -1,5 +1,7 @@
-import { App, normalizePath, PluginSettingTab, Setting } from "obsidian";
-import type MarginPlugin from "./main";
+/**
+ * Settings shape and parsing. Deliberately free of Obsidian imports so the
+ * parse rules are testable; the settings tab lives in `settings-tab.ts`.
+ */
 
 export interface MarginSettings {
   /** Folder new captures are written to. Created on first dump if missing. */
@@ -10,34 +12,19 @@ export const DEFAULT_SETTINGS: MarginSettings = {
   capturesFolder: "Captures"
 };
 
-export class MarginSettingTab extends PluginSettingTab {
-  constructor(
-    app: App,
-    private readonly plugin: MarginPlugin
-  ) {
-    super(app, plugin);
-  }
+/**
+ * Build settings from whatever is on disk, keeping only keys Margin knows.
+ *
+ * Reading key-by-key rather than spreading the stored object means data left by
+ * an older version — or by a feature that has since been retired — is dropped
+ * on the next save instead of being carried forward forever.
+ */
+export function parseSettings(stored: unknown): MarginSettings {
+  const data = (stored ?? {}) as Record<string, unknown>;
+  const capturesFolder =
+    typeof data.capturesFolder === "string" && data.capturesFolder.trim()
+      ? data.capturesFolder.trim()
+      : DEFAULT_SETTINGS.capturesFolder;
 
-  display(): void {
-    const { containerEl } = this;
-    containerEl.empty();
-
-    new Setting(containerEl)
-      .setName("Captures folder")
-      .setDesc("Where Quick Dump saves new notes. Created automatically if it does not exist.")
-      .addText((text) =>
-        text
-          .setPlaceholder(DEFAULT_SETTINGS.capturesFolder)
-          .setValue(this.plugin.settings.capturesFolder)
-          .onChange(async (value) => {
-            // normalizePath flattens backslashes and stray slashes, so the
-            // dump path downstream can stay Obsidian-free.
-            const trimmed = value.trim();
-            this.plugin.settings.capturesFolder = trimmed
-              ? normalizePath(trimmed)
-              : DEFAULT_SETTINGS.capturesFolder;
-            await this.plugin.saveSettings();
-          })
-      );
-  }
+  return { capturesFolder };
 }

@@ -1,7 +1,8 @@
 import { Notice, Plugin } from "obsidian";
 import { CaptureModal } from "./capture/capture-modal";
 import { quickDump } from "./capture/quick-dump";
-import { DEFAULT_SETTINGS, MarginSettings, MarginSettingTab } from "./settings";
+import { MarginSettings, parseSettings } from "./settings";
+import { MarginSettingTab } from "./settings-tab";
 import { ObsidianVaultIO } from "./vault/obsidian-vault-io";
 import { VaultWriter } from "./vault/vault-writer";
 
@@ -47,7 +48,7 @@ export default class MarginPlugin extends Plugin {
   }
 
   async loadSettings(): Promise<void> {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    this.settings = parseSettings(await this.loadData());
   }
 
   async saveSettings(): Promise<void> {
