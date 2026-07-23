@@ -1,5 +1,8 @@
 node_modules/
-package-lock.json
+
+# Build output — shipped as a release asset, not committed.
+main.js
+main.js.map
 
 # Local plugin state written by Obsidian — user data, not source.
 data.json
@@ -8,5 +11,5 @@ data.json
 *.log
 .DS_Store
 
-# Pre-TypeScript main.js, kept until the port is verified.
+# Local prototype leftover, never committed. Prototype lives in archive/prototype-1.1.0.
 main.js.pre-ts-backup

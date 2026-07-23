@@ -1,9 +1,9 @@
 {
   "id": "margin",
   "name": "Margin",
-  "version": "1.1.0",
+  "version": "0.1.0",
   "minAppVersion": "1.4.0",
-  "description": "Your best thinking happens in the margin. A navigator, a to-do sidebar, switchable colour schemes and micro-UI blocks for the Margin theme.",
+  "description": "Route a thought to the right note as you capture it. Offline, plain Markdown, with undo.",
   "author": "Tammy",
   "authorUrl": "https://github.com/Tammzz",
   "isDesktopOnly": false

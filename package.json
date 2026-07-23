@@ -1,18 +1,24 @@
 {
   "name": "obsidian-margin",
-  "version": "1.1.0",
-  "description": "Margin — navigator, to-do sidebar, colour schemes and micro-UI blocks for Obsidian.",
+  "version": "0.1.0",
+  "description": "Margin — route a captured thought to the right note as you write it. Offline, plain Markdown, with undo.",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "node esbuild.config.mjs",
     "build": "tsc --noEmit && node esbuild.config.mjs production",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run"
   },
   "devDependencies": {
+    "@eslint/js": "^9.17.0",
     "@types/node": "^22.10.2",
-    "esbuild": "^0.24.2",
+    "esbuild": "^0.28.1",
+    "eslint": "^9.17.0",
     "obsidian": "^1.7.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.1",
+    "vitest": "^3.2.7"
   }
 }
