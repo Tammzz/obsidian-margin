@@ -37,3 +37,35 @@ body {
   --margin-ui-font: var(--font-interface);
   --margin-ui-font-size: var(--font-ui-small);
 }
+
+/* Capture box */
+
+.margin-capture-input {
+  width: 100%;
+  min-height: 6em;
+  resize: vertical;
+  padding: var(--margin-ui-padding);
+  border: 1px solid var(--margin-ui-border);
+  border-radius: var(--margin-ui-radius);
+  background: var(--margin-ui-background);
+  color: var(--margin-ui-text);
+  font-family: var(--margin-ui-font);
+}
+
+.margin-capture-input:focus {
+  border-color: var(--margin-ui-border-focus);
+  outline: none;
+}
+
+.margin-capture-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--margin-ui-gap);
+  margin-top: var(--margin-ui-gap);
+}
+
+.margin-capture-hint {
+  color: var(--margin-ui-text-faint);
+  font-size: var(--margin-ui-font-size);
+}

@@ -13,3 +13,8 @@ data.json
 
 # Local prototype leftover, never committed. Prototype lives in archive/prototype-1.1.0.
 main.js.pre-ts-backup
+
+# Local planning docs — stay off the public repo.
+prd/
+issues/
+ralph/
